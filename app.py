@@ -84,12 +84,14 @@ def menu():
         range_end = int(link_range.split('-')[1])
         start_total = time.time()
         n = 0
-        for url in link_dict["links"][range_start:range_end]:
+        link_dict_range = link_dict["links"][range_start:range_end]
+        for url in link_dict_range:
             start = time.time()
             print(url[1])
             download_episode(url[1])
+            index_of = str(link_dict["links"].index(url) + 1)
             src = str(url[0]).replace(':', '').replace('.', '').replace('?', '') + '.ts'
-            dst = str(url[1].split('-video')[1][:-1] + '_' + src)
+            dst = str(url[1].split('-video')[1][:-1] + '_' + index_of + '_' + src)
             file1 = os.path.join(my_path, src)
             file2 = os.path.join(my_path, dst)
             print(f"source {file1}, destination {file2}")

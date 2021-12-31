@@ -9,7 +9,8 @@ range_start = int(link_range.split('-')[0]) - 1
 range_end = int(link_range.split('-')[1])
 
 link_dict = LinkFile.read_links(json_links_file)
-link_dict_range = link_dict["links"][range_start:range_end]
+print(len(link_dict['links']))
+link_dict_range = link_dict['links'][range_start:range_end]
 
 
 list_of_files = os.listdir(my_path)
@@ -23,12 +24,13 @@ for file in list_of_files:
     for dict_item in link_dict_range:
         if file == dict_item[0].replace(':', '').replace('.', '').replace('?', ''):
             vid_num = dict_item[1].split('-video')[1][:-1]
-            print(f'{file} | {dict_item[0]} | {dict_item[1]} | {vid_num}')
+            index_of = link_dict["links"].index(dict_item) + 1
+            print(f'{file} | {dict_item[0]} | {dict_item[1]} | {vid_num} | {index_of}')
             file1 = os.path.join(my_path, full_file)
-            new_file = f'{vid_num}_{full_file}'.replace(' ','_')
+            new_file = f'{vid_num}_{index_of}_{full_file}'.replace(' ','_')
             file2 = os.path.join(my_path, new_file)
-            print(file1)
-            print(file2)
+            #print(file1)
+            #print(file2)
             #os.rename(file1, file2)
             match_per_file += 1
             match_count += 1

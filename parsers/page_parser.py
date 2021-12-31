@@ -49,7 +49,10 @@ class PageParser:
         try:
             initiate_button = self.browser.find_element(*PageLocators.DOWN_INITIATE1080)
         except:
-            initiate_button = self.browser.find_element(*PageLocators.DOWN_INITIATE720)
+            try:
+                initiate_button = self.browser.find_element(*PageLocators.DOWN_INITIATE720)
+            except:
+                initiate_button = self.browser.find_element(*PageLocators.DOWN_INITIATE540)
         initiate_button.click()
 
     def complete_download(self):
