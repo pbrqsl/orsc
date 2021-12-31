@@ -1,6 +1,7 @@
 import time
 import random
 import os
+import json
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -9,7 +10,7 @@ import temp_dict
 from filer import LinkFile
 
 my_path = r'C:\Users\user1\Downloads'
-import json
+
 
 #start chrome with installed extension
 #connect to the page
@@ -25,6 +26,8 @@ json_links_file = 'links.json'
 json_pwd_file = '_secret.json'
 #jsn_pwd_file_format:
 #{"username": "abc", "password": "sdasdasdasd"}
+url_splitter = r'-RCSA_'
+
 PROMPT = """
 Browser is currently pending. 
 - If you want to generate the list of course videos to download please go to any video of that course in the browser controled by application.
@@ -91,7 +94,7 @@ def menu():
             download_episode(url[1])
             index_of = str(link_dict["links"].index(url) + 1)
             src = str(url[0]).replace(':', '').replace('.', '').replace('?', '') + '.ts'
-            dst = str(url[1].split('-video')[1][:-1] + '_' + index_of + '_' + src)
+            dst = str(url[1].split(url_splitter)[1][:-1] + '_' + index_of + '_' + src)
             file1 = os.path.join(my_path, src)
             file2 = os.path.join(my_path, dst)
             print(f"source {file1}, destination {file2}")
