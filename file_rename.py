@@ -1,7 +1,9 @@
 import os
+import re
 import temp_dict
 from filer import LinkFile
-my_path = r'D:\python_home\python_full_course\to_rename'
+my_path = r'D:\python_home\01_python_COURSES\to_rename'
+
 
 json_links_file = 'links.json'
 link_range = input('file range: ')
@@ -14,7 +16,7 @@ link_dict_range = link_dict['links'][range_start:range_end]
 
 
 list_of_files = os.listdir(my_path)
-print(list_of_files)
+#print(list_of_files)
 
 match_count = 0
 for file in list_of_files:
@@ -22,6 +24,8 @@ for file in list_of_files:
     file = file.split('.')[0]
     match_per_file = 0
     for dict_item in link_dict_range:
+        splitter = dict_item[1].split('/')[6]
+        print(splitter)
         if file == dict_item[0].replace(':', '').replace('.', '').replace('?', ''):
             vid_num = dict_item[1].split('-video')[1][:-1]
             index_of = link_dict["links"].index(dict_item) + 1
@@ -29,8 +33,8 @@ for file in list_of_files:
             file1 = os.path.join(my_path, full_file)
             new_file = f'{vid_num}_{index_of}_{full_file}'.replace(' ','_')
             file2 = os.path.join(my_path, new_file)
-            #print(file1)
-            #print(file2)
+            print(file1)
+            print(file2)
             #os.rename(file1, file2)
             match_per_file += 1
             match_count += 1

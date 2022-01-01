@@ -37,6 +37,11 @@ class PageParser:
         results = [(video.get_attribute('text'), video.get_attribute('href')) for video in video_list]
         return results
 
+    @property
+    def course_title(self):
+        course_title = self.browser.find_element(*PageLocators.COURSE_TITLE)
+        return course_title.text
+
     def click_pause(self):
         play_window = self.browser.find_element(*PageLocators.PLAY_WINDOW)
         play_window.click()
