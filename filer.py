@@ -2,13 +2,15 @@ import json
 
 class LinkFile:
     @classmethod
-    def save_links(cls, title: str, content: list, file):
-        json_dict = {'links': [],
-                     'title': title}
+    def save_links(cls, id: str, title: str, content: list, file):
+        current_list = cls.read_links(file)
+        current_list[id] = [title, []]
         for item in content:
-            json_dict['links'].append(item)
+            current_list[id][1].append(item)
+
         with open(file, 'w') as json_file:
-            json_file.write(json.dumps(json_dict))
+            json_file.write(json.dumps(current_list))
+
 
     @classmethod
     def read_links(cls, file):

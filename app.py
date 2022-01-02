@@ -100,24 +100,56 @@ def menu():
             videos = vid_page.videos
             time.sleep(2)
             title = vid_page.course_title
-            LinkFile.save_links(title, videos, json_links_file)
+            course_id = chrome.current_url.split('/')[5]
+            print(course_id)
+            print(title)
+            LinkFile.save_links(course_id, title, videos, json_links_file)
             #print(videos)
         menu()
 
     elif user_input == 'scrap':
         link_dict = LinkFile.read_links(json_links_file)
-        print(f'currently there is {len(link_dict["links"])}')
-        link_range = input('please provide the range of videos to scrap (e.g. 10-20), please note that first video has index "1": ')
-        range_start = int(link_range.split('-')[0]) - 1
-        range_end = int(link_range.split('-')[1])
-        start_total = time.time()
-        n = 0
-        link_dict_range = link_dict["links"][range_start:range_end]
-        for url in link_dict_range:
+
+        #print(f'currently there is {len(link_dict["links"])}')
+        link_dict_range = []
+        finished = False
+        while not finished:
+            menu_item = 1
+            menu_courses = {}
+            for key in link_dict:
+                menu_courses[str(menu_item)] = key
+                print(f'{menu_item}: {key}, {link_dict[key][0]}, {len(link_dict[key][1])}')
+                menu_item += 1
+            user_course_id = input('Please enter the course number (when finished enter: "done"): ')
+            link_range = input('please provide the range of videos to scrap (e.g. 10-20 or 2-2 for single video), please note that first video has index "1": ')
+            range_start = int(link_range.split('-')[0]) - 1
+            range_end = int(link_range.split('-')[1])
+            start_total = time.time()
+            n = 0
+            key = menu_courses[user_course_id]
+            for url in link_dict[key][1][range_start:range_end]:
+                index_of = link_dict[key][1].index(url) + 1
+                course_title = link_dict[key][0]
+                link_dict_range.append([key, course_title, str(index_of), url[0], url[1]])
+            print(link_dict_range)
+            user_done = input('Do you want to add more links? <yes/no>: ')
+            if user_done == 'no':
+                finished = True
+
+
+        for item in link_dict_range:
             start = time.time()
-            print(url[1])
-            index_of = str(link_dict["links"].index(url) + 1)
-            dirname = link_dict["title"]
+            print('----------')
+            print(item)
+            url=[item[3], item[4]]
+            index_of = item[2]
+            dirname = item[1]
+            print(f'url: {url}')
+            print(f'indexof: {index_of}')
+            print(f'dirname: {dirname}')
+            print('----------')
+            #index_of = str(url[0].index(url) + 1)
+            #dirname = link_dict[key][0]
             download_episode(url, my_path, index_of, dirname)
             print(f'Download lasted {time.time() - start}')
             n += 1
